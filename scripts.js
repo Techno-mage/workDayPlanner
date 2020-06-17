@@ -22,7 +22,11 @@ var planner = {
 
      },
      displayItems: function(){
-
+        for (item of this.items){
+            var s = $("<div>").text(item.time);
+            s.addClass("time-block");
+            $("#items").append(s);
+        }
      }
 
 
@@ -40,6 +44,7 @@ $(document).ready(function (){
     //planner.writeItems();
     planner.readItems();
     console.log(planner.items);
+    planner.displayItems();
 
 
 
