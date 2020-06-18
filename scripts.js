@@ -24,20 +24,31 @@ var planner = {
      displayItems: function(){
         for (item of this.items){
             var s = $("<div>").addClass("time-block row");
+            s.val(this.items.indexOf(item));
             var t = $("<div>").text(item.time);
             t.addClass("col-1")
             var u = $("<textarea>").text(item.item);
             u.addClass("col-9 past")
-            s.append(t, u, $("<div>").addClass("saveBtn col-2"))
+            var v = $("<div>").addClass("saveBtn col-2");
+            s.append(t, u, v)
             $("#items").append(s);
+                 
         }
+        $(".saveBtn").click(function(event){
+            var element = event.target;
+            let time = element.previousSibling.previousSibling.textContent;
+            let content = element.previousSibling.value;
+            console.log("button pushed" + content);
+            console.log(element.parentNode.value);
+            planner.items[element.parentNode.value].item = content;
+            console.log(planner.items);
+            planner.writeItems();
+
+        });
      }
 
-
-
-
-
 }
+
 
 
 
@@ -49,9 +60,11 @@ $(document).ready(function (){
     planner.readItems();
     console.log(planner.items);
     planner.displayItems();
-    $("#currentDay").text(moment().format("dddd, MMM Do"));
+    var currentDay = moment();
+    $("#currentDay").text(currentDay.format("dddd, MMM Do"));
     console.log(typeof moment().format("dddd, MMM Do"));
-    console.log(moment().isBefore(21, "hour"));
+    console.log(moment().isBefore("2020-6-18T8:00:00Z", "hour"));
+    console.log(moment().isBefore("2020-6-18T18:00:00Z", "hour"));
     console.log(moment().isBefore(12, "hour"));
 
 })
