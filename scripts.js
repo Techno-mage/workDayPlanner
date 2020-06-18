@@ -1,3 +1,5 @@
+var currentDay;
+
 var planner = {
      items: [
          {time: "9am", item: ""},
@@ -22,14 +24,25 @@ var planner = {
 
      },
      displayItems: function(){
-        for (item of this.items){
+        for (let i = 0; i<this.items.length; i++){
             var s = $("<div>").addClass("time-block row");
-            s.val(this.items.indexOf(item));
-            var t = $("<div>").text(item.time);
+            s.val(i);
+            var t = $("<div>").text(this.items[i].time);
             t.addClass("col-1")
-            var u = $("<textarea>").text(item.item);
-            u.addClass("col-9 past")
+            var u = $("<textarea>").text(this.items[i].item);
+            u.addClass("col-9")
+            let thisTime = i+9;
+            let currentTime = parseInt(currentDay.format("H")); 
+            console.log(currentTime);
+            if (thisTime == currentTime){
+                u.addClass("present");
+            } else if (thisTime > currentTime){
+                u.addClass("future");
+            } else {
+                u.addClass("past");
+            }
             var v = $("<div>").addClass("saveBtn col-2");
+            v.text("Save");
             s.append(t, u, v)
             $("#items").append(s);
                  
@@ -38,8 +51,6 @@ var planner = {
             var element = event.target;
             let time = element.previousSibling.previousSibling.textContent;
             let content = element.previousSibling.value;
-            console.log("button pushed" + content);
-            console.log(element.parentNode.value);
             planner.items[element.parentNode.value].item = content;
             console.log(planner.items);
             planner.writeItems();
@@ -54,17 +65,16 @@ var planner = {
 
 
 $(document).ready(function (){
-    console.log("this is working.")
     
-    //planner.writeItems();
+    //planner.writeItems(); // for testing
+    currentDay = moment();
+    //currentDay.hour(12);  // for testing
     planner.readItems();
     console.log(planner.items);
     planner.displayItems();
-    var currentDay = moment();
+    
     $("#currentDay").text(currentDay.format("dddd, MMM Do"));
-    console.log(typeof moment().format("dddd, MMM Do"));
-    console.log(moment().isBefore("2020-6-18T8:00:00Z", "hour"));
-    console.log(moment().isBefore("2020-6-18T18:00:00Z", "hour"));
-    console.log(moment().isBefore(12, "hour"));
+    
+    
 
 })
